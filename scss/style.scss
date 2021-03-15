@@ -1,0 +1,65 @@
+/*partials*/
+@import './resets';
+@import './variables';
+
+// functions
+@function weight ($weight-name){
+    @return map-get($map: $font-weights, $key: $weight-name);
+} 
+
+// mixins
+@mixin flexCenter($direction) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: $direction;
+}
+
+@mixin theme($light-theme:true){
+    @if $light-theme {
+        // can lighten or darken a color
+        background: lighten($primary-color, 100%);
+        color: darken($color: $text-color, $amount: 100%);
+    }
+}
+
+@mixin mobile {
+    @media screen and (max-width: $mobile) {
+      @content;
+    }
+}
+
+body{
+    background: $primary-color;
+    color: $text-color;
+}
+
+.main{
+    @include flexCenter(row);
+    width: 80% - 40%; //don't mix types eg % and pixels
+    margin: 0 auto; /*style to center */
+    
+
+    #{&}-text1{ /*#-parent {&}- main textname from parent class */
+        font-weight: weight(medium);
+
+        &:hover{
+            color: pink;
+        }
+    }
+
+    #{&}-text2{
+        @extend .main-text1; //get same properties from maintext1
+        &:hover{
+            color: $accent-color
+        }
+    }
+
+    @include mobile{
+        flex-direction: column;
+    }
+}
+
+.light{
+    @include theme($light-theme: true);
+}
